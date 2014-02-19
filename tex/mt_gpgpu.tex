@@ -2,3 +2,13 @@
 
 \chapter{Características principales de la GPU como procesador de propósito
 general}
+
+La diferencia principal entre la GPU y la CPU se encuentra en su capacidad de
+procesamiento paralelo. Hoy en día es fácil encontrar computadoras personales de
+escritorio y portátiles de cuatro u ocho núcleos, esto le permite ejecutar un
+thread por núcleo con gran facilidad. Una GPU moderna puede ejecutar 1024
+threads con la misma facilidad, siempre que todos ejecuten la misma función. Su
+modelo de ejecución es similar a la arquitectura SIMD(Single Instruction,
+Multiple Data), pero dado que dos threads pueden ejecutar distintos caminos de
+datos siempre que se encuentren en distintos \emph{wavefronts}. Por esto nvidia
+llama a este modelo SIMT(Single Instruction, Multiple Thread).

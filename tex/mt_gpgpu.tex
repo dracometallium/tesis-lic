@@ -10,5 +10,23 @@ thread por núcleo con gran facilidad. Una GPU moderna puede ejecutar 1024
 threads con la misma facilidad, siempre que todos ejecuten la misma función. Su
 modelo de ejecución es similar a la arquitectura SIMD(Single Instruction,
 Multiple Data), pero dado que dos threads pueden ejecutar distintos caminos de
-datos siempre que se encuentren en distintos \emph{wavefronts}. Por esto nvidia
-llama a este modelo SIMT(Single Instruction, Multiple Thread).
+datos siempre que se encuentren en distintos WAVEFRONTS. Por esto nvidia llama a
+este modelo SIMT(Single Instruction, Multiple Thread).
+
+Las funciones ejecutadas por la GPU son llamadas KERNELS. La diferencia entre un
+KERNEL y una función convencional, es que los KERNELS se ejecutan sobre un
+dominio de indices multidimensional. Cada uno de los threads que ejecutan los
+KERNELS son llamados WORKITEMS. El conjunto de WORKITEMS que se ejecuta en
+conjunto es llamado WAVEFRONT. Si los caminos de datos de  WORKITEMS en un mismo
+WAVEFRONT recorren distintas ramas de una estructura de control, cada una de
+estas se ejecuta en serie. Es por esto que siempre se debe intentar que los
+WORKITEMS de un mismo WAVEFRONT recorran el mismo camino de datos. Los
+dispositivos actuales tienen WAVEFRONST de 32 0 64 WORKITEMS. Los WORKITEMS son
+lanzados en forma secuencial y son asignados a los WAVEFRONTS de forma ordenada.
+Por lo tanto, si el dispositivo tiene WAVEFRONTS de tamaño N, el WAVEFRONT K
+estará formado por los WORKITEMS (K*N) al ((K*N+1)-1). Los WAVEFRONTS se agrupan
+en WORKGROUPS. Los WORKITEMS de un mismo WORKGROUP pueden sincronizar su
+ejecución a través de barreras y pueden compartir información por medio de una
+memoria local. WORKITEMS de WORKGROUPS diferentes solo pueden compartir datos
+utilizando la memoria global, que es mucho mas lenta que la local, y no pueden
+sincronizar su ejecución.

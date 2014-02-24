@@ -6,33 +6,33 @@ general}
 La diferencia principal entre la GPU y la CPU se encuentra en su capacidad de
 procesamiento paralelo. Hoy en día es fácil encontrar computadoras personales de
 escritorio y portátiles de cuatro u ocho núcleos, esto le permite ejecutar un
-thread por núcleo con gran facilidad. Una GPU moderna puede ejecutar 1024 threads
-con la misma facilidad, siempre que todos ejecuten la misma función. Su modelo de
-ejecución es similar a la arquitectura SIMD(Single Instruction, Multiple Data),
-pero dos threads pueden ejecutar distintos caminos de datos siempre que se
-encuentren en distintos WAVEFRONTS. Por esto nvidia llama a este modelo
-SIMT(Single Instruction, Multiple Thread).
+thread por núcleo con gran facilidad. Una GPU moderna puede ejecutar 1024
+threads con la misma facilidad, siempre que todos ejecuten la misma función. Su
+modelo de ejecución es similar a la arquitectura SIMD(Single Instruction,
+Multiple Data), pero dos threads pueden ejecutar distintos caminos de datos
+siempre que se encuentren en distintos WAVEFRONTS. Por esto nvidia llama a este
+modelo SIMT(Single Instruction, Multiple Thread).
 
 Las funciones ejecutadas por la GPU son llamadas KERNELS. La diferencia entre un
 KERNEL y una función convencional, es que los KERNELS se ejecutan sobre un
 dominio de indices multidimensional. Cada uno de los threads que ejecutan el
-KERNEL son llamados WORKITEMS. El conjunto de WORKITEMS que se ejecutan juntos es
-llamado WAVEFRONT. Si los caminos de datos de dos WORKITEMS en un mismo WAVEFRONT
-recorren distintas ramas de una estructura de control, cada una de estas se
-ejecuta en serie. Es por esto que siempre se debe intentar que los WORKITEMS de
-un mismo WAVEFRONT recorran el mismo camino de datos. Los dispositivos actuales
-tienen WAVEFRONS de 32 o 64 WORKITEMS. Los WORKITEMS son lanzados en forma
-secuencial y son asignados a los WAVEFRONTS de forma ordenada, por lo tanto, si
-el dispositivo tiene WAVEFRONTS de tamaño N, el WAVEFRONT K estará formado por
-los WORKITEMS (K*N) al (K*(N+1)-1). Los WAVEFRONTS se agrupan en WORKGROUPS. Los
-WORKITEMS de un mismo WORKGROUP pueden sincronizar su ejecución a través de
-barreras y pueden compartir información por medio de una memoria local WORKITEMS
-de WORKGROUPS diferentes solo pueden compartir datos utilizando la memoria
-global, que es mucho mas lenta que la local, y no pueden sincronizar su
-ejecución.
+KERNEL son llamados WORKITEMS. El conjunto de WORKITEMS que se ejecutan juntos
+es llamado WAVEFRONT. Si los caminos de datos de dos WORKITEMS en un mismo
+WAVEFRONT recorren distintas ramas de una estructura de control, cada una de
+estas se ejecuta en serie. Es por esto que siempre se debe intentar que los
+WORKITEMS de un mismo WAVEFRONT recorran el mismo camino de datos. Los
+dispositivos actuales tienen WAVEFRONS de 32 o 64 WORKITEMS. Los WORKITEMS son
+lanzados en forma secuencial y son asignados a los WAVEFRONTS de forma ordenada,
+por lo tanto, si el dispositivo tiene WAVEFRONTS de tamaño N, el WAVEFRONT K
+estará formado por los WORKITEMS (K*N) al (K*(N+1)-1). Los WAVEFRONTS se agrupan
+en WORKGROUPS. Los WORKITEMS de un mismo WORKGROUP pueden sincronizar su
+ejecución a través de barreras y pueden compartir información por medio de una
+memoria local WORKITEMS de WORKGROUPS diferentes solo pueden compartir datos
+utilizando la memoria global, que es mucho mas lenta que la local, y no pueden
+sincronizar su ejecución.
 
-Su organización jerárquica de ejecución se refleja en su arquitectura. En la cima
-de la jerarquía nos encontramos con el HOST y el DEVICE. El HOST es el
+Su organización jerárquica de ejecución se refleja en su arquitectura. En la
+cima de la jerarquía nos encontramos con el HOST y el DEVICE. El HOST es el
 dispositivo que ejecuta el programa principal, el DEVICE es la GPU en si misma
 (se debe aclarar que OpenCL permite que el DEVICE sea otro tipo de dispositivo,
 incluyendo, pero no limitado a, un CPU). El HOST es el encargado de coordinar el

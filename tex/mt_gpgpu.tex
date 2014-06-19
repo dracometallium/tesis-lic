@@ -10,8 +10,8 @@ thread por núcleo con gran facilidad. Una GPU moderna puede ejecutar 1024
 threads con la misma facilidad, siempre que todos ejecuten la misma función. Su
 modelo de ejecución es similar a la arquitectura SIMD(Single Instruction,
 Multiple Data), pero dos threads pueden ejecutar distintos caminos de datos
-siempre que se encuentren en distintos WAVEFRONTS. Por esto nvidia llama a este
-modelo SIMT(Single Instruction, Multiple Thread).
+siempre que se encuentren en distintos WAVEFRONTS. Por esto nvidia distingue a
+este modelo llamándolo SIMT(Single Instruction, Multiple Thread).
 
 Las funciones ejecutadas por la GPU son llamadas KERNELS. La diferencia entre un
 KERNEL y una función convencional, es que los KERNELS se ejecutan sobre un
@@ -27,7 +27,7 @@ por lo tanto, si el dispositivo tiene WAVEFRONTS de tamaño N, el WAVEFRONT K
 estará formado por los WORKITEMS (K*N) al (K*(N+1)-1). Los WAVEFRONTS se agrupan
 en WORKGROUPS. Los WORKITEMS de un mismo WORKGROUP pueden sincronizar su
 ejecución a través de barreras y pueden compartir información por medio de una
-memoria local WORKITEMS de WORKGROUPS diferentes solo pueden compartir datos
+memoria local. WORKITEMS de WORKGROUPS diferentes solo pueden compartir datos
 utilizando la memoria global, que es mucho mas lenta que la local, y no pueden
 sincronizar su ejecución.
 
@@ -36,21 +36,21 @@ cima de la jerarquía nos encontramos con el HOST y el DEVICE. El HOST es el
 dispositivo que ejecuta el programa principal, el DEVICE es la GPU en si misma
 (se debe aclarar que OpenCL permite que el DEVICE sea otro tipo de dispositivo,
 incluyendo, pero no limitado a, un CPU). El HOST es el encargado de coordinar el
-funcionamiento del GPU, proveyéndole de datos iniciales y cargando el KERNEL a
-ejecutar. El DEVICE tiene dos tipos de memoria propia, la memoria global, que
-puede ser accedida por todos los WORKITEMS, pero es de acceso lento, y la
-memoria constante que puede ser leída pero no modificada por todos los WORKITEMS
-Ambas memorias deben ser reservadas por el HOST, y en el caso de la constante,
-solo puede ser iniciada por este. La transferencia de datos entre la memoria
-global del DEVICE y la memoria del HOST es muy lenta, y es una de las
-principales fuentes de overhead en los programas que utilizan OpenCL.
+funcionamiento del GPU, proveyéndole de datos iniciales, cargando el KERNEL a
+ejecutar y cordinando su ejecución. El DEVICE tiene dos tipos de memoria propia,
+la memoria global, que puede ser accedida por todos los WORKITEMS, pero es de
+acceso lento, y la memoria constante que puede ser leída pero no modificada por
+todos los WORKITEMS. Ambas memorias deben ser reservadas por el HOST y en el
+caso de la constante solo puede ser iniciada por este. La transferencia de datos
+entre la memoria global del DEVICE y la memoria del HOST es muy lenta, y es una
+de las principales fuentes de overhead en los programas que utilizan OpenCL.
 
 El DEVICE esta compuesto por una o mas COMPUTING UNITS, es en estas donde se
-encuentra la memoria local. Esta memoria es mas rápida que la memoria global
+encuentra la memoria local. Esta memoria es mas rápida que la memoria global.
 Todos los WORKITEMS de un WORKGROUP ejecutan en la misma COMPUTING UNIT, pero
-una COMPUTING UNIT puede ejecutar distintos WORKGROUPS Finalmente, cada
+una COMPUTING UNIT puede ejecutar distintos WORKGROUPS. Finalmente, cada
 COMPUTING UNIT esta formada por uno o varios PROCESSING ELEMENTS, es en estos
-que se ejecutan los WORKITEMS Poseen registros muy rápidos pero pequeños que son
-utilizados para las variables locales de los WORKITEMS Normalmente cada
+que se ejecutan los WORKITEMS. Poseen registros muy rápidos pero pequeños que
+son utilizados para las variables locales de los WORKITEMS. Normalmente cada
 COMPUTING UNIT poseen mas de una ALU, y en cada ciclo de reloj ejecuta varios
 WORKITEMS de un mismo WAVEFRONT.

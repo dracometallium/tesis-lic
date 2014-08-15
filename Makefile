@@ -6,7 +6,7 @@ GARBAGE=$(NAME).aux $(NAME).bbl $(NAME).blg $(NAME).log $(NAME).pdf $(NAME).toc
 
 all:
 	pdflatex $(TEX)
-#	bibtex $(AUX)
+	bibtex $(AUX)
 	pdflatex $(TEX)
 	pdflatex $(TEX)
 

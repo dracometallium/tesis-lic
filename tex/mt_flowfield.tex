@@ -1,0 +1,53 @@
+% vim: set spell:
+
+\chapter{Flow field pathfinding}
+
+Flow field pathfinding(Búsqueda de camino por campos de flujo) es una técnica
+sencilla especialmente útil cuando gran cantidad de agentes comparten el mismo
+conjunto de metas. Dado un grafo, se calcula el costo desde cada nodo a la meta
+mas cercana creado un nuevo grafo. Con este nuevo grafo se calcula un tercer
+grafo de gradientes, simplemente calculando para cada nodo la dirección de aquel
+vecino con menor costo hasta la meta. De esta manera, los agentes solo necesitan
+conocer en que nodo se encuentra, y seguir el gradiente indicado en este.
+
+En el caso de estudio de esta tesis veremos su aplicación a video juegos, en
+especial en aquellos de estrategia en tiempo real, ya que estos normalmente
+poseen una gran cantidad de agentes(normalmente denominados unidades) con metas
+compartidas. Usualmente las unidades se movilizan sobre un mapa con obstáculos
+dinámicos(incluyendo otras unidades), estáticos y otros temporales pero que no
+cambian de posición, o lo hacen muy esporádicamente. El costo definido en el
+párrafo anterior puede tener distintas interpretaciones. Por un lado puede ser
+simplemente la distancia entre un punto a otro, pero también puede variar
+dependiendo de múltiples factores, como zonas que es deseable evitar o la
+densidad de unidades(lo que ayuda a evitar la congestión).
+
+En 'Continuum Crowds'\cite{CC06} se presenta el problema de búsqueda de caminos
+como un problema de minimización de energía de partículas. Proveen un robusto
+marco teórico donde se busca el camino que minimice $ \sigma(P) $, definida
+como:
+
+\begin{equation} \sigma(P) = \alpha \int_P 1 ds + \beta \int_P 1 dt + \gamma
+\int_P g(x) dt \label{eqCost} \end{equation}
+
+Donde $dt$ indica que la integral se toma con respecto del tiempo, y $ds$ con
+respecto a la distancia. $ g(x) $ es una función que determina el grado de
+disconformidad que genera el punto $ x $. Las constantes $\alpha$, $\beta$ y
+$\gamma$ pueden variar entre grupos unidades, y representan que importancia le
+asigna esta a la longitud del camino, el tiempo que se tarde en recorrerlo y
+evitar las zonas de disconformidad.
+
+Si $ f $ es la rapidez del agente, la ecuación puede ser re escrita como $
+\sigma(P) = \int_P C(x) ds $ , donde:
+
+\begin{equation} C(x) = \frac{ \alpha f + \beta + \gamma g(x) } { f }
+\label{costoCamino}\end{equation} 
+
+Si para cada punto $x$ elegimos el camino que minimice $\sigma(P)$ podemos
+definir una nueva función $\phi(x)$, que indique para cada punto su distancia
+mínima a la meta. Para un agente en la posición $x$ la estrategia optima sera
+moverse en dirección contraria al gradiente de $\phi(x)$. Utilizando la ecuación
+\ref{costoCamino}, podemos definir $\phi(x)$ como $\phi(M)=0$ para todo $M$ que
+sea meta, y para cualquier otra posición debe satisfacer la ecuación eikonal:
+
+\begin{equation} || \nabla\phi(x) || = C(x)
+\label{defphi}\end{equation} 

@@ -1,56 +1,62 @@
 % vim: set spell:
 
-\chapter{Características principales de la GPU como procesador de propósito
-general}
+\chapter{Características principales de la \emph{gpu} como procesador de
+propósito general}
 
-La diferencia principal entre la GPU y la CPU se encuentra en su capacidad de
-procesamiento paralelo. Hoy en día es fácil encontrar computadoras personales de
-escritorio y portátiles de cuatro u ocho núcleos, esto le permite ejecutar un
-thread por núcleo con gran facilidad. Una GPU moderna puede ejecutar 1024
-threads con la misma facilidad, siempre que todos ejecuten la misma función. Su
-modelo de ejecución es similar a la arquitectura SIMD(Single Instruction,
-Multiple Data), pero dos threads pueden ejecutar distintos caminos de datos
-siempre que se encuentren en distintos WAVEFRONTS. Por esto nvidia distingue a
-este modelo llamándolo SIMT(Single Instruction, Multiple Thread).
+La diferencia principal entre la \emph{gpu} y la \emph{cpu} se encuentra en su
+capacidad de procesamiento paralelo. Hoy en día es fácil encontrar computadoras
+personales de escritorio y portátiles de cuatro u ocho núcleos, esto le permite
+ejecutar un thread por núcleo con gran facilidad. Una \emph{gpu} moderna puede
+ejecutar 1024 threads con la misma facilidad, siempre que todos ejecuten la
+misma función. Su modelo de ejecución es similar a la arquitectura
+\emph{simd}(\emph{Single Instruction, Multiple Data}), pero dos threads pueden
+ejecutar distintos caminos de datos siempre que se encuentren en distintos
+\emph{wavefronts}. Por esto \emph{Nvidia} distingue a este modelo llamándolo
+\emph{simt}(\emph{Single Instruction, Multiple Thread}).
 
-Las funciones ejecutadas por la GPU son llamadas KERNELS. La diferencia entre un
-KERNEL y una función convencional, es que los KERNELS se ejecutan sobre un
-dominio de indices multidimensional. Cada uno de los threads que ejecutan el
-KERNEL son llamados WORKITEMS. El conjunto de WORKITEMS que se ejecutan juntos
-es llamado WAVEFRONT. Si los caminos de datos de dos WORKITEMS en un mismo
-WAVEFRONT recorren distintas ramas de una estructura de control, cada una de
-estas se ejecuta en serie. Es por esto que siempre se debe intentar que los
-WORKITEMS de un mismo WAVEFRONT recorran el mismo camino de datos. Los
-dispositivos actuales tienen WAVEFRONS de 32 o 64 WORKITEMS. Los WORKITEMS son
-lanzados en forma secuencial y son asignados a los WAVEFRONTS de forma ordenada,
-por lo tanto, si el dispositivo tiene WAVEFRONTS de tamaño N, el WAVEFRONT K
-estará formado por los WORKITEMS (K*N) al (K*(N+1)-1). Los WAVEFRONTS se agrupan
-en WORKGROUPS. Los WORKITEMS de un mismo WORKGROUP pueden sincronizar su
-ejecución a través de barreras y pueden compartir información por medio de una
-memoria local. WORKITEMS de WORKGROUPS diferentes solo pueden compartir datos
-utilizando la memoria global, que es mucho mas lenta que la local, y no pueden
-sincronizar su ejecución.
+Las funciones ejecutadas por la \emph{gpu} son llamadas \emph{kernels}. La
+diferencia entre un \emph{kernel} y una función convencional, es que los
+\emph{kernels} se ejecutan sobre un dominio de indices multidimensional. Cada
+uno de los threads que ejecutan el \emph{kernel} son llamados \emph{workitems}.
+El conjunto de \emph{workitems} que se ejecutan juntos es llamado
+\emph{wavefront}. Si los caminos de datos de dos \emph{workitems} en un mismo
+\emph{wavefront} recorren distintas ramas de una estructura de control, cada una
+de estas se ejecuta en serie. Es por esto que siempre se debe intentar que los
+\emph{workitems} de un mismo \emph{wavefront} recorran el mismo camino de datos.
+Los dispositivos actuales tienen \emph{wavefrons} de 32 o 64 \emph{workitems}.
+Los \emph{workitems} son lanzados en forma secuencial y son asignados a los
+\emph{wavefronts} de forma ordenada, por lo tanto, si el dispositivo tiene
+\emph{wavefronts} de tamaño $N$, el \emph{wavefront} $K$ estará formado por los
+\emph{workitems} $(K*N)$ al $(K*(N+1)-1)$. Los \emph{wavefronts} se agrupan en
+\emph{workgroups}. Los \emph{workitems} de un mismo \emph{workgroup} pueden
+sincronizar su ejecución a través de barreras y pueden compartir información por
+medio de una memoria local. \emph{workitems} de \emph{workgroups} diferentes
+solo pueden compartir datos utilizando la memoria global, que es mucho mas lenta
+que la local, y no pueden sincronizar su ejecución.
 
 Su organización jerárquica de ejecución se refleja en su arquitectura. En la
-cima de la jerarquía nos encontramos con el HOST y el DEVICE. El HOST es el
-dispositivo que ejecuta el programa principal, el DEVICE es la GPU en si misma
-(se debe aclarar que OpenCL permite que el DEVICE sea otro tipo de dispositivo,
-incluyendo, pero no limitado a, un CPU). El HOST es el encargado de coordinar el
-funcionamiento del GPU, proveyéndole de datos iniciales, cargando el KERNEL a
-ejecutar y coordinando su ejecución. El DEVICE tiene dos tipos de memoria propia,
-la memoria global, que puede ser accedida por todos los WORKITEMS, pero es de
-acceso lento, y la memoria constante que puede ser leída pero no modificada por
-todos los WORKITEMS. Ambas memorias deben ser reservadas por el HOST y en el
-caso de la constante solo puede ser iniciada por este. La transferencia de datos
-entre la memoria global del DEVICE y la memoria del HOST es muy lenta, y es una
-de las principales fuentes de overhead en los programas que utilizan OpenCL.
+cima de la jerarquía nos encontramos con el \emph{host} y el \emph{device}. El
+\emph{host} es el dispositivo que ejecuta el programa principal, el
+\emph{device} es la \emph{gpu} en si misma (se debe aclarar que \emph{OpenCL} permite
+que el \emph{device} sea otro tipo de dispositivo, incluyendo, pero no limitado
+a, un \emph{cpu}). El \emph{host} es el encargado de coordinar el funcionamiento
+del \emph{gpu}, proveyéndole de datos iniciales, cargando el \emph{kernel} a
+ejecutar y coordinando su ejecución. El \emph{device} tiene dos tipos de memoria
+propia, la memoria global, que puede ser accedida por todos los
+\emph{workitems}, pero es de acceso lento, y la memoria constante que puede ser
+leída pero no modificada por todos los \emph{workitems}. Ambas memorias deben
+ser reservadas por el \emph{host} y en el caso de la constante solo puede ser
+iniciada por este. La transferencia de datos entre la memoria global del
+\emph{device} y la memoria del \emph{host} es muy lenta, y es una de las
+principales fuentes de overhead en los programas que utilizan \emph{OpenCL}.
 
-El DEVICE esta compuesto por una o mas COMPUTING UNITS, es en estas donde se
-encuentra la memoria local. Esta memoria es mas rápida que la memoria global.
-Todos los WORKITEMS de un WORKGROUP ejecutan en la misma COMPUTING UNIT, pero
-una COMPUTING UNIT puede ejecutar distintos WORKGROUPS. Finalmente, cada
-COMPUTING UNIT esta formada por uno o varios PROCESSING ELEMENTS, es en estos
-que se ejecutan los WORKITEMS. Poseen registros muy rápidos pero pequeños que
-son utilizados para las variables locales de los WORKITEMS. Normalmente cada
-COMPUTING UNIT poseen mas de una ALU, y en cada ciclo de reloj ejecuta varios
-WORKITEMS de un mismo WAVEFRONT.
+El \emph{device} esta compuesto por una o mas \emph{computing units}, es en
+estas donde se encuentra la memoria local. Esta memoria es mas rápida que la
+memoria global.  Todos los \emph{workitems} de un \emph{workgroup} ejecutan en
+la misma \emph{computing unit}, pero una \emph{computing unit} puede ejecutar
+distintos \emph{workgroups}. Finalmente, cada \emph{computing unit} esta formada
+por uno o varios \emph{processing} \emph{elements}, es en estos que se ejecutan
+los \emph{workitems}. Poseen registros muy rápidos pero pequeños que son
+utilizados para las variables locales de los \emph{workitems}. Normalmente cada
+\emph{computing unit} poseen mas de una ALU, y en cada ciclo de reloj ejecuta
+varios \emph{workitems} de un mismo \emph{wavefront}.

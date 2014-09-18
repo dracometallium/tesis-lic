@@ -1,0 +1,41 @@
+% vim: set spell:
+
+\section{\emph{Pathfinding} en video juegos de estrategia en tiempo real}
+
+\emph{Pathfinding} es la búsqueda de una de la ruta de menor coste entre dos
+nodos de un grafo. El coste puede tener distintas interpretaciones. Cuando se
+trata de encontrar un camino en un grafo que representa un espacio físico, el
+costo comúnmente representara la distancia entre los nodos o el tiempo necesario
+para moverse de uno al otro, pero podrían tenerse en cuenta otras variables como
+que zonas se desea evitar.
+
+Existen un gran numero de algoritmos de \emph{Pathfinding} acorde a la gran
+variedad de dominios en los que se aplica. Algunas de estos son redes,
+robótica, simulación y video juegos, cada uno con sus propias restricciones.
+Incluso dentro de los video juegos hay variedad en las restricciones. En los
+juegos por turnos el jugador espera que la acción se vea detenida
+momentáneamente mientras el sistema de inteligencia artificial calcula sus
+movimientos, mientras que esto no es aceptable un juego en tiempo real. Así
+mismo, la cantidad de agentes puede variar de unos pocos a cientos. Este ultimo
+es el caso de los juegos de estrategia en tiempo real, también conocidos como
+\emph{RTS}.
+
+Los \emph{RTS} son video juegos donde los jugadores (ya sean humanos o
+controlados por la computadora) comandan una gran cantidad de unidades que puede
+variar desde docenas a miles. Por ejemplo en el titulo 'Age of empires II' de
+1999 tiene un limite de 200 unidades por jugador con un máximo de 8 jugadores.
+Esto propone un reto, ya que para mantener una cantidad de cuadros por segundo
+de 30fps(aceptado como el mínimo de facto para una experiencia
+placentera\cite{framerate06}) el algoritmo de \emph{pathfinding} no puede tardar
+mas de 33ms por cada cuadro. Otra dificultad es el hardware. Si bien una
+computadora dedicada para juegos suele tener mayores prestaciones que una de
+oficina, no son comparables con aquellas preparadas para cálculos de altas
+prestaciones. Según la encuesta de hardware de Steam\cite{steamSurvey} de julio
+del 2014, solo menos del 40\% de las computadoras con la plataforma instalada
+tienen por lo menos 8gb de memoria ram, y menos del 10\% tienen mas de cuatro
+procesadores. 
+
+Otro punto a tener en cuenta es que no solo basta con calcular la ruta, sino que
+las unidades deben ser capases de recorrerla. Con tantos otros agentes en
+movimiento es esperable que se produzca congestión y el ambiente se vuelve
+altamente dinámico.

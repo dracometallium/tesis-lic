@@ -39,3 +39,13 @@ Otro punto a tener en cuenta es que no solo basta con calcular la ruta, sino que
 las unidades deben ser capases de recorrerla. Con tantos otros agentes en
 movimiento es esperable que se produzca congestión y el ambiente se vuelve
 altamente dinámico.
+
+Los algoritmos de búsqueda de caminos pueden dividirse entre aquellos que son
+multi-agente y aquellos que no lo son. Que un algoritmo no sea multi-agente no
+significa que no pueda ser aplicado a un grupo de agentes, sino que cada agente
+tendrá una visión limitada de los planes de los demás agentes, limitándose
+normalmente solo a conocer su posición y velocidad. En casos donde hay gran
+densidad de agentes, esto puede llevar congestión e incluso situaciones de
+deathlock. Los algoritmos multi-agente intentan evitar estas situaciones
+permitiendo a los agentes compartir mas información, ya sea las rutas planeadas,
+o información de la congestión actual.
